@@ -1,5 +1,5 @@
-ame: Check Storingen
-on:
+name: Check Storingen
+cron:
   schedule:
     # Dit is de 'precies op het kwartier' notatie
     - cron: '0,15,30,45 * * * *' 

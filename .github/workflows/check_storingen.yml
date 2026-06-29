@@ -1,21 +1,21 @@
-name: Check Storingen
+ame: Check Storingen
 on:
   schedule:
-    - cron: '*/15 * * * *' # Draait elke 15 minuten
-  workflow_dispatch: # Hiermee kun je het handmatig testen
+    # Dit is de 'precies op het kwartier' notatie
+    - cron: '0,15,30,45 * * * *' 
+  workflow_dispatch:
 
 jobs:
   check:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-      - name: Install dependencies
-        run: pip install requests
-      - name: Run script
+      - name: Git setup en run
+        run: |
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          pip install requests
+          python check_storingen.py
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-        run: python check_storingen.py
